@@ -22,26 +22,13 @@ final class ViewController: UIViewController {
     
     private var lipstickModel : SCNNode?
     
-    private  let newCollection: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        let collection = UICollectionView(frame: CGRect(x: 0, y: 0, width: 200, height: 100), collectionViewLayout: layout)
-        layout.scrollDirection = .horizontal
-        collection.backgroundColor = UIColor.gray
-        collection.translatesAutoresizingMaskIntoConstraints = false
-        collection.isScrollEnabled = true
-        return collection
-    }()
-    
-    private var collectionNode : SCNNode?
-    
-    private let cellId = "NewCVC"
-    
+
     override func viewDidLoad() {
         
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
-        setupCollectionViewNode()
+
         
         //Set view's delegate
         arscnView.delegate = self
@@ -61,29 +48,7 @@ final class ViewController: UIViewController {
         
     }
     
-    private func setupCollectionViewNode(){
-        
-        newCollection.register(NewCVC.self, forCellWithReuseIdentifier: cellId)
-        newCollection.delegate = self
-        newCollection.dataSource = self
-  
-         DispatchQueue.main.async { [weak self] in
-            guard let `self` = self else { return }
-        let collectionPlane = SCNPlane(width: 0.2, height: 0.1)
-        collectionPlane.firstMaterial?.diffuse.contents = self.newCollection
-
-         self.collectionNode = SCNNode(geometry: collectionPlane)
-        
-        //collectionNode.eulerAngles.x = -.pi/2
-        
-       // collectionNode?.runAction(SCNAction.moveBy(x: 0, y: 0, z: 0, duration: 0))
-
-        self.collectionNode?.position = SCNVector3(x: 0, y: 0.5, z: 0)
-        
-        }
-       // node.addChildNode(collectionNode)
-        
-    }
+ 
 
     override func viewWillAppear(_ animated: Bool) {
         
@@ -115,26 +80,6 @@ final class ViewController: UIViewController {
 }
 
 
-//MARK:- CollectionView
-extension ViewController : UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 7
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = newCollection.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! NewCVC
-        cell.backgroundColor = .blue
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 100, height: 50)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-       return UIEdgeInsets(top: 3, left: 3, bottom: 3, right: 3)
-    }
-}
 
 //MARK:- AR
 extension ViewController : ARSCNViewDelegate{
@@ -182,6 +127,33 @@ extension ViewController : ARSCNViewDelegate{
         return node
     }
     
+    private func videoNode() -> SCNNode{
+                //find our video file
+         let videoNode = SKVideoNode(fileNamed: "black.mp4")
+         videoNode.play()
+         // set the size (just a rough one will do)
+         let videoScene = SKScene(size: CGSize(width: 640, height: 360))
+         // center our video to the size of our video scene
+         videoNode.position = CGPoint(x: videoScene.size.width / 2, y: videoScene.size.height / 2)
+         // invert our video so it does not look upside down
+         videoNode.yScale = -1.0
+         // add the video to our scene
+         videoScene.addChild(videoNode)
+         // create a plan that has the same real world height and width as our detected image
+         let plane = SCNPlane(width: 0.2, height: 0.1)
+         // set the first materials content to be our video scene
+         plane.firstMaterial?.diffuse.contents = videoScene
+         // create a node out of the plane
+         let planeNode = SCNNode(geometry: plane)
+        
+          planeNode.position = SCNVector3(x: 0, y: 0.2, z: 0)
+         // since the created node will be vertical, rotate it along the x axis to have it be horizontal or parallel to our detected image
+        // planeNode.eulerAngles.x = Float.pi / 2
+         // finally add the plane node (which contains the video node) to the added node
+        // node.addChildNode(planeNode)
+         return planeNode
+     }
+    
     private func addLipStick(parentNode : SCNNode){
         
         guard let lipstickModel = loadModel(modelName: "lipsticks2.dae") else {return}
@@ -223,11 +195,8 @@ extension ViewController : ARSCNViewDelegate{
             if let lipstickModel = lipstickModel, lipstickModel.name == result.node.name {
                 
                 print("match")
-                
-                guard let cN = collectionNode  else {return }
-             
-                    lipstickModel.addChildNode(cN)
-               
+
+               lipstickModel.addChildNode(videoNode())
                 
             }
             else{

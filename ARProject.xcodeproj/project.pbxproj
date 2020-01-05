@@ -17,6 +17,7 @@
 		B06C9B5123C234CD00B44116 /* ARProjectUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06C9B5023C234CD00B44116 /* ARProjectUITests.swift */; };
 		B06C9B6723C2450D00B44116 /* lipsticks2.dae in Resources */ = {isa = PBXBuildFile; fileRef = B06C9B6623C2450D00B44116 /* lipsticks2.dae */; };
 		B06C9B6F23C275A500B44116 /* NewCVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06C9B6E23C275A500B44116 /* NewCVC.swift */; };
+		B06C9B7423C2855F00B44116 /* black.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B06C9B7323C2855F00B44116 /* black.mp4 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 		B06C9B5223C234CD00B44116 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B06C9B6623C2450D00B44116 /* lipsticks2.dae */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml.dae; path = lipsticks2.dae; sourceTree = "<group>"; };
 		B06C9B6E23C275A500B44116 /* NewCVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCVC.swift; sourceTree = "<group>"; };
+		B06C9B7323C2855F00B44116 /* black.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; name = black.mp4; path = ../../../../Downloads/black.mp4; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +105,7 @@
 		B06C9B2D23C234CC00B44116 /* ARProject */ = {
 			isa = PBXGroup;
 			children = (
+				B06C9B7323C2855F00B44116 /* black.mp4 */,
 				B06C9B2E23C234CC00B44116 /* AppDelegate.swift */,
 				B06C9B3023C234CC00B44116 /* SceneDelegate.swift */,
 				B06C9B3223C234CC00B44116 /* ViewController.swift */,
@@ -240,6 +243,7 @@
 			files = (
 				B06C9B3B23C234CD00B44116 /* LaunchScreen.storyboard in Resources */,
 				B06C9B6723C2450D00B44116 /* lipsticks2.dae in Resources */,
+				B06C9B7423C2855F00B44116 /* black.mp4 in Resources */,
 				B06C9B3823C234CD00B44116 /* Assets.xcassets in Resources */,
 				B06C9B3623C234CC00B44116 /* Main.storyboard in Resources */,
 			);
