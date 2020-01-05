@@ -128,23 +128,43 @@ extension ViewController : ARSCNViewDelegate{
     }
     
     private func videoNode() -> SCNNode{
-                //find our video file
-         let videoNode = SKVideoNode(fileNamed: "black.mp4")
-         videoNode.play()
-         // set the size (just a rough one will do)
-         let videoScene = SKScene(size: CGSize(width: 640, height: 360))
-         // center our video to the size of our video scene
-         videoNode.position = CGPoint(x: videoScene.size.width / 2, y: videoScene.size.height / 2)
-         // invert our video so it does not look upside down
-         videoNode.yScale = -1.0
-         // add the video to our scene
-         videoScene.addChild(videoNode)
-         // create a plan that has the same real world height and width as our detected image
-         let plane = SCNPlane(width: 0.2, height: 0.1)
-         // set the first materials content to be our video scene
-         plane.firstMaterial?.diffuse.contents = videoScene
-         // create a node out of the plane
-         let planeNode = SCNNode(geometry: plane)
+        
+        
+        let url = URL(string: "https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4")
+        //let videoItem = AVPlayerItem(url: URL(fileURLWithPath: fileUrlString))
+        
+        let videoItem = AVPlayerItem(url: url!)
+        
+        let player = AVPlayer(playerItem: videoItem)
+        //initialize video node with avplayer
+        let videoNode = SKVideoNode(avPlayer: player)
+        
+        
+        player.play()
+        // add observer when our player.currentItem finishes player, then start playing from the beginning
+        NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: player.currentItem, queue: nil) { (notification) in
+            player.seek(to: CMTime.zero)
+            player.play()
+            print("Looping Video")
+        }
+        
+        // set the size (just a rough one will do)
+        let videoScene = SKScene(size: CGSize(width: 480, height: 360))
+        // center our video to the size of our video scene
+        videoNode.position = CGPoint(x: videoScene.size.width / 2, y: videoScene.size.height / 2)
+        // invert our video so it does not look upside down
+        videoNode.yScale = -1.0
+        // add the video to our scene
+        videoScene.addChild(videoNode)
+        // create a plan that has the same real world height and width as our detected image
+        let plane = SCNPlane(width: 0.2, height: 0.1)
+        // set the first materials content to be our video scene
+        plane.firstMaterial?.diffuse.contents = videoScene
+        // create a node out of the plane
+        let planeNode = SCNNode(geometry: plane)
+        
+        
+
         
           planeNode.position = SCNVector3(x: 0, y: 0.2, z: 0)
          // since the created node will be vertical, rotate it along the x axis to have it be horizontal or parallel to our detected image
